@@ -7,16 +7,8 @@
   <title>Facebox 1.2 Programmatic Tests</title>
   <link href="facebox.css" media="screen" rel="stylesheet" type="text/css" />
   <link href="faceplant.css" media="screen" rel="stylesheet" type="text/css" />
-  <script src="jquery.js" type="text/javascript"></script>
-  <script src="facebox.js" type="text/javascript"></script>
-  <script type="text/javascript">
-    jQuery(document).ready(function($) {
-      $('a[rel*=facebox]').facebox({
-        loading_image : 'loading.gif',
-        close_image   : 'closelabel.gif'
-      }) 
-    })
-  </script>
+  <script src="prototype.js" type="text/javascript"></script>
+  <script src="protofacebox.js" type="text/javascript"></script>
   <style type="text/css">
 	.my-groovy-style {
 		color: yellow;
@@ -49,6 +41,23 @@
 	<div id="box" style="border: solid; width: 150px;">
 		Watch me go into a facebox!
 	</div>
+
+
+  <script type="text/javascript">
+
+	var f = new ProtoFacebox();
+	f.reveal($('box'));
+	// Event.observe(window, 'load', function() {
+	// 	console.log($$('a[rel]'));
+	// });
+
+    // jQuery(document).ready(function($) {
+    //   $('a[rel*=facebox]').facebox({
+    //     loading_image : 'loading.gif',
+    //     close_image   : 'closelabel.gif'
+    //   }) 
+    // })
+  </script>
 
 </body>
 </html>

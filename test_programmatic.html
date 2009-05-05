@@ -8,6 +8,7 @@
   <link href="facebox.css" media="screen" rel="stylesheet" type="text/css" />
   <link href="faceplant.css" media="screen" rel="stylesheet" type="text/css" />
   <script src="prototype.js" type="text/javascript"></script>
+  <script src="effects.js" type="text/javascript"></script>
   <script src="protofacebox.js" type="text/javascript"></script>
   <style type="text/css">
 	.my-groovy-style {
@@ -46,6 +47,7 @@
   <script type="text/javascript">
 
 	var f = new ProtoFacebox();
+	f.loading($('box'));
 	f.reveal($('box'));
 	// Event.observe(window, 'load', function() {
 	// 	console.log($$('a[rel]'));

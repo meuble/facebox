@@ -34,16 +34,18 @@ var ProtoFacebox = Class.create({
         </table> \
       </div> \
     </div>'
-		}
+		};
+		// this.init();
+		this.loading();
 	},
 
 	loading: function() {
-		init();
-		if ($$('#facebox .loading')[0].length == 1) return true;
-		showOverlay();
+		this.init();
+		if ($('protofacebox_loading') != null) return true;
+		this.showOverlay();
 
 		$$('#facebox .content')[0].empty();
-		$('#facebox .body')[0].hide().uptdate('<div class="loading"><img src="' + this.settings.loadingImage + '"/></div>');
+		$('#facebox .body')[0].hide().insert('<div id="protofacebox_loading"><img src="' + this.settings.loadingImage + '"/></div>');
 
 		$('#facebox').setStyle({
 			'top':	getPageScroll()[1] + (getPageHeight() / 10),
@@ -63,9 +65,9 @@ var ProtoFacebox = Class.create({
 		console.log(data);
 		console.log($$('#facebox .content'));
 		$$('#facebox .content')[0].appendChild(data);
-		$$('#facebox .loading')[0].remove();
-		$('#facebox .body')[0].show();
-		$$('#facebox').setStyle({left: $(window).width() / 2 - ($$('#facebox table')[0].width() / 2)});
+		$('protofacebox_loading').remove();
+		$$('#facebox .body')[0].show();
+		$('facebox').setStyle({left: $(window).width() / 2 - ($$('#facebox table')[0].width() / 2)});
 		$(document).fire('ProtoFacebox:reveal')
 		$(document).fire('ProtoFacebox:afterReveal');
 	},
@@ -73,29 +75,47 @@ var ProtoFacebox = Class.create({
 	close: function() {},
 	
 	init: function(settings) {
-		if ($.facebox.settings.inited) return true
-    else $.facebox.settings.inited = true
+		if (this.settings.inited) return true;
+    	else this.settings.inited = true;
 
-    $(document).trigger('init.facebox')
-    makeCompatible()
+    	$(document).fire('ProtoFacebox:init');
 
-    var imageTypes = $.facebox.settings.imageTypes.join('|')
-    $.facebox.settings.imageTypesRegexp = new RegExp('\.(' + imageTypes + ')$', 'i')
+    	var imageTypes = this.settings.imageTypes.join('|');
+    	this.settings.imageTypesRegexp = new RegExp('\.(' + imageTypes + ')$', 'i');
 
-    if (settings) $.extend($.facebox.settings, settings)
-    $('body').append($.facebox.settings.faceboxHtml)
+    	if (settings) 
+			extend(this.settings, settings);
+   		$$('body')[0].insert(this.settings.faceboxHtml);
 
-    var preload = [ new Image(), new Image() ]
-    preload[0].src = $.facebox.settings.closeImage
-    preload[1].src = $.facebox.settings.loadingImage
+    	var preload = [ new Image(), new Image() ];
+    	preload[0].src = this.settings.closeImage;
+    	preload[1].src = this.settings.loadingImage;
 
-    $('#facebox').find('.b:first, .bl, .br, .tl, .tr').each(function() {
-      preload.push(new Image())
-      preload.slice(-1).src = $(this).css('background-image').replace(/url\((.+)\)/, '$1')
-    })
+    	$$('#facebox .b:first', '#facebox .bl', '#facebox .br', '#facebox .tl', '#facebox .tr').each(function(e) {
+      		preload.push(new Image());
+      		preload.slice(-1).src = e.getStyle('background-image').replace(/url\((.+)\)/, '$1');
+    	})
 
-    $('#facebox .close').click($.facebox.close)
-    $('#facebox .close_image').attr('src', $.facebox.settings.closeImage)
+    	$$('#facebox .close')[0].observe('click', this.close.bind(this));
+    	$$('#facebox .close_image')[0].setAttribute('src', this.settings.closeImage);
+  	},
+
+  	skipOverlay: function() {
+    	return this.settings.overlay == false || this.settings.opacity === null
+  	},
+
+  	showOverlay: function() {
+    	if (this.skipOverlay()) return;
+
+    	if ($('facebox_overlay') == null)
+      		$$("body")[0].insert('<div id="facebox_overlay" class="facebox_hide"></div>');
+
+    	$('facebox_overlay').hide().addClassName("facebox_overlayBG")
+      		.setStyle('opacity', this.settings.opacity)
+      		.observe('click', function() { $(document).fire('ProtoFacebox:close') })
+      		.appear();
+    	return false;
   }
+
   
 });

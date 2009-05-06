@@ -9,15 +9,15 @@ var ProtoFacebox = Class.create({
 			faceboxHtml  : '\
     <div id="facebox" style="display:none;"> \
       <div class="popup"> \
-        <table> \
+        <table id="protofacebox_table"> \
           <tbody> \
             <tr> \
               <td class="tl"/><td class="b"/><td class="tr"/> \
             </tr> \
             <tr> \
               <td class="b"/> \
-              <td class="body"> \
-                <div class="content"> \
+              <td id="protofacebox_body"> \
+                <div id="protofacebox_content"> \
                 </div> \
                 <div class="footer"> \
                   <a href="#" class="close"> \
@@ -44,12 +44,12 @@ var ProtoFacebox = Class.create({
 		if ($('protofacebox_loading') != null) return true;
 		this.showOverlay();
 
-		$$('#facebox .content')[0].empty();
-		$('#facebox .body')[0].hide().insert('<div id="protofacebox_loading"><img src="' + this.settings.loadingImage + '"/></div>');
+		$('protofacebox_content').empty();
+		$('protofacebox_body').hide().insert('<div id="protofacebox_loading"><img src="' + this.settings.loadingImage + '"/></div>');
 
-		$('#facebox').setStyle({
+		$('facebox').setStyle({
 			'top':	getPageScroll()[1] + (getPageHeight() / 10),
-			'left':	$(window).width() / 2 - 205
+			'left':	document.width / 2 - 205
 		}).show();
 
 		// $(document).bind('keydown.facebox', function(e) {
@@ -61,13 +61,13 @@ var ProtoFacebox = Class.create({
 	
 	reveal: function(data, klass) {
 		$(document).fire('ProtoFacebox:beforeReveal');
-		if (klass) $$('#facebox .content')[0].addClassName(klass);
+		if (klass) $('protofacebox_content').addClassName(klass);
 		console.log(data);
-		console.log($$('#facebox .content'));
-		$$('#facebox .content')[0].appendChild(data);
+		console.log($('protofacebox_content'));
+		$('protofacebox_content').appendChild(data);
 		$('protofacebox_loading').remove();
-		$$('#facebox .body')[0].show();
-		$('facebox').setStyle({left: $(window).width() / 2 - ($$('#facebox table')[0].width() / 2)});
+		$('protofacebox_body').appear();
+		$('facebox').setStyle({left: document.width / 2 - ($('protofacebox_table').getDimensions().width / 2)});
 		$(document).fire('ProtoFacebox:reveal')
 		$(document).fire('ProtoFacebox:afterReveal');
 	},
@@ -111,7 +111,7 @@ var ProtoFacebox = Class.create({
       		$$("body")[0].insert('<div id="facebox_overlay" class="facebox_hide"></div>');
 
     	$('facebox_overlay').hide().addClassName("facebox_overlayBG")
-      		.setStyle('opacity', this.settings.opacity)
+      		.setOpacity(this.settings.opacity)
       		.observe('click', function() { $(document).fire('ProtoFacebox:close') })
       		.appear();
     	return false;
@@ -119,3 +119,33 @@ var ProtoFacebox = Class.create({
 
   
 });
+
+
+// getPageScroll() by quirksmode.com
+function getPageScroll() {
+  var xScroll, yScroll;
+  if (self.pageYOffset) {
+    yScroll = self.pageYOffset;
+    xScroll = self.pageXOffset;
+  } else if (document.documentElement && document.documentElement.scrollTop) {	 // Explorer 6 Strict
+    yScroll = document.documentElement.scrollTop;
+    xScroll = document.documentElement.scrollLeft;
+  } else if (document.body) {// all other Explorers
+    yScroll = document.body.scrollTop;
+    xScroll = document.body.scrollLeft;
+  }
+  return new Array(xScroll,yScroll)
+}
+
+// Adapted from getPageSize() by quirksmode.com
+function getPageHeight() {
+  var windowHeight
+  if (self.innerHeight) {	// all except Explorer
+    windowHeight = self.innerHeight;
+  } else if (document.documentElement && document.documentElement.clientHeight) { // Explorer 6 Strict Mode
+    windowHeight = document.documentElement.clientHeight;
+  } else if (document.body) { // other Explorers
+    windowHeight = document.body.clientHeight;
+  }
+  return windowHeight
+}

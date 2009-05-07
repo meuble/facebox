@@ -47,7 +47,6 @@ var ProtoFacebox = Class.create({
 	},
 
 	loading: function() {
-		// this.init();
 		if ($('protofacebox_loading') != null) return true;
 		this.showOverlay();
 		
@@ -149,7 +148,7 @@ var ProtoFacebox = Class.create({
 		  method: 'get',
 		  onSuccess: function(transport) {
 			this.reveal(transport.responseText, klass);
-		  }
+		  }.bind(this)
 		});
   	},
 

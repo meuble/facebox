@@ -25,17 +25,17 @@
 
 <body>
 	<h1>Programmatic Tests</h1>
-	<a href="#" onclick="new ProtoFacebox('something cool');">Programmatic text.</a><br/>
-	<a href="javascript: jQuery.facebox('something cool', 'my-groovy-style');">Programmatic text with a style.</a><br/>
+	<a href="#" onclick="new ProtoFacebox({markup: 'something cool'});">Programmatic text.</a><br/>
+	<a href="#" onclick="new ProtoFacebox({markup: 'something cool', class: 'my-groovy-style'});">Programmatic text with a style.</a><br/>
 
 	<a href="#" onclick="new ProtoFacebox({image:'stairs.jpg'});">Programmatic image.</a><br/>
-	<a href="javascript: jQuery.facebox({image:'stairs.jpg'}, 'my-groovy-style');">Programmatic image with a style.</a><br/>
+	<a href="#" onclick="new ProtoFacebox({image:'stairs.jpg', class: 'my-groovy-style'});">Programmatic image with a style.</a><br/>
 
 	<a href="#" onclick="new ProtoFacebox({ajax:'remote.html'});">Programmatic ajax.</a><br/>
-	<a href="javascript: jQuery.facebox({ajax:'remote.html'}, 'my-groovy-style');">Programmatic ajax with a style.</a><br/>
+	<a href="#" onclick="new ProtoFacebox({ajax:'remote.html', class: 'my-groovy-style'});">Programmatic ajax with a style.</a><br/>
 
-	<a href="#" onclick="new ProtoFacebox($('box'));">Programmatic div.</a><br/>
-	<a href="javascript: jQuery.facebox({div:'#box'}, 'my-groovy-style');">Programmatic div with a style.</a><br/>
+	<a href="#" onclick="new ProtoFacebox({div:'box'});">Programmatic div.</a><br/>
+	<a href="#" onclick="new ProtoFacebox({div:'box', class: 'my-groovy-style'});">Programmatic div with a style.</a><br/>
 
 	<br/>
 	

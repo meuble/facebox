@@ -1,6 +1,6 @@
 var ProtoFacebox = Class.create({
-	initialize: function(data, klass, options) {
-		this.settings = {
+	initialize: function(options) {
+		var defaults = {
 			opacity      : 0,
 			overlay      : false,
 			loadingImage : 'file:///Users/sakkaoui/Documents/code/facebox/loading.gif',
@@ -35,14 +35,19 @@ var ProtoFacebox = Class.create({
       </div> \
     </div>'
 		};
+		console.log(options);
+		this.settings = Object.extend(defaults, options || {});
+		console.log(this.settings.class);
 		this.init();
 		
-		if (data) {
+		if (this.settings) {
 			this.loading();
-			if (data.ajax) this.fillFaceboxFromAjax(data.ajax, klass);
-		    else if (data.image) this.fillFaceboxFromImage(data.image, klass);
-		    else if (Object.isFunction(data)) data.call(this);
-		    else this.reveal(data, klass);
+			if (this.settings.ajax) this.fillFaceboxFromAjax(this.settings.ajax);
+		    else if (this.settings.image) this.fillFaceboxFromImage(this.settings.image);
+		    else if (this.settings.callback && Object.isFunction(this.settings.callback)) this.settings.callback.call(this);
+		    else if (this.settings.div) this.reveal($(this.settings.div));
+		    else if (this.settings.markup) this.reveal(this.settings.markup);
+			else console.log("Data type unknown. Can't display anything");
 		}
 	},
 
@@ -67,9 +72,9 @@ var ProtoFacebox = Class.create({
 		$(document).fire('ProtoFacebox:loading');
 	},
 	
-	reveal: function(data, klass) {
+	reveal: function(data) {
 		$(document).fire('ProtoFacebox:beforeReveal');
-		if (klass) $('protofacebox_content').addClassName(klass);
+		if (this.settings.class) $('protofacebox_content').addClassName(this.settings.class);
 		$('protofacebox_content').insert(data);
 		if ($('protofacebox_loading')) $('protofacebox_loading').remove();
 		$('protofacebox_body').appear();
@@ -83,6 +88,7 @@ var ProtoFacebox = Class.create({
 	    $('protofacebox').fade();
      	this.hideOverlay();
 		if ($('protofacebox_loading') != null) $('protofacebox_loading').remove();
+		if (this.settings.class) $('protofacebox_content').removeClassName(this.settings.class);
 		
 		$(document).fire('ProtoFacebox:close');
       	return false;
@@ -143,20 +149,20 @@ var ProtoFacebox = Class.create({
     	return false;
   	},
 
-  	fillFaceboxFromAjax: function(url, klass) {
+  	fillFaceboxFromAjax: function(url) {
 		new Ajax.Request(url, {
 		  method: 'get',
 		  onSuccess: function(transport) {
-			this.reveal(transport.responseText, klass);
+			this.reveal(transport.responseText);
 		  }.bind(this)
 		});
   	},
 
-  	fillFaceboxFromImage: function(href, klass) {
+  	fillFaceboxFromImage: function(href) {
     	var image = new Image();
 		
 		var f = function() {
-      		this.reveal('<div class="image"><img src="' + image.src + '" /></div>', klass);
+      		this.reveal('<div class="image"><img src="' + image.src + '" /></div>');
     	}
 
     	image.onload = f.bind(this)

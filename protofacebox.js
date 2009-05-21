@@ -35,9 +35,9 @@ var ProtoFacebox = Class.create({
       </div> \
     </div>'
 		};
-		console.log(options);
-		this.settings = Object.extend(defaults, options || {});
-		console.log(this.settings.class);
+		
+	    this.settings = Object.extend(defaults, options || { });
+		console.log(this);
 		this.init();
 		
 		if (this.settings) {

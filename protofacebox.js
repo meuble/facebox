@@ -3,8 +3,8 @@ var ProtoFacebox = Class.create({
 		var defaults = {
 			opacity      : 0,
 			overlay      : false,
-			loadingImage : 'file:///Users/sakkaoui/Documents/code/facebox/loading.gif',
-			closeImage   : 'file:///Users/sakkaoui/Documents/code/facebox/closelabel.gif',
+			loadingImage : 'loading.gif',
+			closeImage   : 'closelabel.gif',
 			imageTypes   : [ 'png', 'jpg', 'jpeg', 'gif' ],
 			faceboxHtml  : '\
     <div id="protofacebox" style="display:none;"> \
